@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+SQLAlchemy
+alembic
+passlib[bcrypt]
+jose[cryptography]
+httpx
+google-cloud-language
