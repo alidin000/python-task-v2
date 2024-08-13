@@ -8,3 +8,5 @@ jose[cryptography]
 httpx
 google-cloud-language
 multipart
+requests
+faker
