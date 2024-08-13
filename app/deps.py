@@ -12,12 +12,18 @@ def get_current_user(token: str = Depends(auth.oauth2_scheme), db: Session = Dep
     )
     try:
         payload = jwt.decode(token, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
-        user_id: int = payload.get("sub")
+        print(f"Decoded payload: {payload}")
+        user_id: str = payload.get("sub")
+        print(f"User ID extracted from token: {user_id}")
         if user_id is None:
             raise credentials_exception
-    except JWTError:
+    except JWTError as e:
+        print(f"JWT decoding failed with error: {e}")
         raise credentials_exception
-    user = crud.get_user(db, user_id=user_id)
+
+
+    user = crud.get_user(db, user_id=int(user_id))
     if user is None:
         raise credentials_exception
     return user
+

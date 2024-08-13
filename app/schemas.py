@@ -1,6 +1,5 @@
 # app/schemas.py
 from pydantic import BaseModel
-from typing import List, Optional
 from datetime import datetime
 
 class UserBase(BaseModel):
@@ -10,12 +9,15 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-class User(UserBase):
+class User(BaseModel):
     id: int
+    username: str
+    email: str
     is_active: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 class LoginRequest(BaseModel):
     username: str
