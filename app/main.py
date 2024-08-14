@@ -42,7 +42,6 @@ def create_post(post: schemas.PostCreate, db: Session = Depends(database.get_db)
 # Create a comment
 @app.post("/posts/{post_id}/comments/", response_model=schemas.Comment)
 def create_comment(post_id: int, comment: schemas.CommentCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(deps.get_current_user)):
-    # is_blocked = moderation.analyze_content(comment.content)
-    is_blocked = False  # Temporarily bypass moderation
+    is_blocked = moderation.analyze_content(comment.content)
     return crud.create_comment(db=db, comment=comment, post_id=post_id, is_blocked=is_blocked)
 

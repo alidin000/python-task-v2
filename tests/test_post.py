@@ -13,7 +13,6 @@ def test_create_post():
     assert response.status_code == 200
     assert response.json()["title"] == "Test Post"
 
-# tests/test_analytics.py
 def test_comments_analytics():
     response = client.get("/api/comments-daily-breakdown?date_from=2020-02-02&date_to=2022-02-15")
     assert response.status_code == 200
