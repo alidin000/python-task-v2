@@ -1,4 +1,5 @@
 # app/main.py
+from typing import AsyncIterator
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -9,6 +10,11 @@ app = FastAPI()
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+
+async def lifespan() -> AsyncIterator[None]:
+    print("Database initializing")
+    database.init_db()
+    yield
 
 # Root endpoint
 @app.get("/")
@@ -38,14 +44,19 @@ def create_post(post: schemas.PostCreate, db: Session = Depends(database.get_db)
     print(f"Current user: {current_user.username} (ID: {current_user.id})")
     return crud.create_post(db=db, post=post, user_id=current_user.id)
 
-# Create a comment
 @app.post("/posts/{post_id}/comments/", response_model=schemas.Comment)
-def create_comment(post_id: int, comment: schemas.CommentCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(deps.get_current_user)):
+def create_comment(
+    post_id: int,
+    comment: schemas.CommentCreate,
+    db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(deps.get_current_user)
+):
     is_blocked = moderation.analyze_content(comment.content)
     print(f"blocked: {is_blocked}")
     if is_blocked:
         raise HTTPException(status_code=400, detail="Comment contains inappropriate content and was blocked.")
     return crud.create_comment(db=db, comment=comment, post_id=post_id, is_blocked=is_blocked)
+
 
 # Analytics on comments over a specified period
 @app.get("/api/comments-daily-breakdown")

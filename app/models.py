@@ -26,6 +26,7 @@ class Post(Base):
 
     owner = relationship("User", back_populates="posts")
     comments = relationship("Comment", back_populates="post")
+    auto_response = relationship("AutoResponseSettings", back_populates="post", uselist=False)
 
 class Comment(Base):
     __tablename__ = "comments"
@@ -37,3 +38,14 @@ class Comment(Base):
     is_blocked = Column(Boolean, default=False)
 
     post = relationship("Post", back_populates="comments")
+
+class AutoResponseSettings(Base):
+    __tablename__ = "auto_response_settings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("posts.id"), unique=True)
+    enabled = Column(Boolean, default=False)
+    response_delay = Column(Integer)
+    response_template = Column(String)
+
+    post = relationship("Post", back_populates="auto_response")

@@ -10,3 +10,6 @@ google-cloud-language
 multipart
 requests
 faker
+pytest
+httpx
+pytest-asyncio

@@ -17,7 +17,6 @@ class Bot:
     def generate_text(self, prompt):
         my_model = genai.GenerativeModel('gemini-1.5-flash')
         response = my_model.generate_content(prompt)
-        print(response)
         try:
             generated_text = response._result.candidates[0].content.parts[0].text
         except (AttributeError, IndexError) as e:
