@@ -1,4 +1,5 @@
 # app/crud.py
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app import models, schemas
 from passlib.context import CryptContext
@@ -35,3 +36,20 @@ def create_comment(db: Session, comment: schemas.CommentCreate, post_id: int, is
     db.commit()
     db.refresh(db_comment)
     return db_comment
+
+def get_comments_analytics(db: Session, date_from: str, date_to: str):
+    results = (
+        db.query(
+            func.date(models.Comment.created_at).label("date"),
+            func.count(models.Comment.id).label("total_comments"),
+            func.sum(models.Comment.is_blocked).label("blocked_comments"),
+        )
+        .filter(models.Comment.created_at >= date_from, models.Comment.created_at <= date_to)
+        .group_by("date")
+        .order_by("date")
+        .all()
+    )
+    return results
+
+def save_auto_response_settings(db: Session, post_id: int, settings: schemas.AutoResponseSettings):
+    pass

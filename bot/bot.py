@@ -63,6 +63,11 @@ class Bot:
         response = requests.post(f"{Config.API_URL}/posts/{post_id}/comments/", json=comment_data, headers=headers)
         response.raise_for_status()
 
+    def get_comments_analytics(self, date_from, date_to):
+        response = requests.get(f"{Config.API_URL}/api/comments-daily-breakdown?date_from={date_from}&date_to={date_to}")
+        response.raise_for_status()
+        return response.json()
+
     def run(self):
         for _ in range(self.num_users):
             username, user_id = self.create_user()
@@ -71,8 +76,20 @@ class Bot:
                 post_id = self.create_post(token, user_id)
                 for _ in range(self.num_comments_per_post):
                     self.create_comment(token, post_id)
-
+        
+        analytics = self.get_comments_analytics("2023-01-01", "2023-12-31")
+        print("Comments Analytics:", analytics)
 
 if __name__ == "__main__":
-    bot = Bot(num_users=3, num_posts_per_user=2, num_comments_per_post=5, comment_type="positive")
+    num_users = int(input("Enter the number of users to create: "))
+    num_posts_per_user = int(input("Enter the number of posts per user: "))
+    num_comments_per_post = int(input("Enter the number of comments per post: "))
+    comment_type = input("Enter comment type (positive/negative): ").strip().lower()
+
+    if comment_type not in ["positive", "negative"]:
+        print("Invalid comment type. Defaulting to 'positive'.")
+        comment_type = "positive"
+
+    bot = Bot(num_users=num_users, num_posts_per_user=num_posts_per_user,
+              num_comments_per_post=num_comments_per_post, comment_type=comment_type)
     bot.run()

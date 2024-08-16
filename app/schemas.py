@@ -1,6 +1,7 @@
 # app/schemas.py
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 class UserBase(BaseModel):
     username: str
@@ -9,15 +10,12 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-class User(BaseModel):
+class User(UserBase):
     id: int
-    username: str
-    email: str
     is_active: bool
 
     class Config:
-        from_attributes = True
-
+        orm_mode = True
 
 class LoginRequest(BaseModel):
     username: str
@@ -52,3 +50,8 @@ class Comment(CommentBase):
 
     class Config:
         orm_mode = True
+
+class AutoResponseSettings(BaseModel):
+    enabled: bool
+    response_delay: int  # in seconds
+    response_template: str
