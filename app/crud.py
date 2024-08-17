@@ -34,7 +34,7 @@ def create_post(db: Session, post: schemas.PostCreate, user_id: int):
     return db_post
 
 def create_comment(db: Session, comment: schemas.CommentCreate, post_id: int, is_blocked: bool):
-    db_comment = models.Comment(**comment.dict(), post_id=post_id, is_blocked=is_blocked)
+    db_comment = models.Comment(**comment.model_dump(), post_id=post_id, is_blocked=is_blocked)
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)

@@ -15,7 +15,7 @@ class User(UserBase):
     is_active: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class LoginRequest(BaseModel):
     username: str
@@ -34,7 +34,7 @@ class Post(PostBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CommentBase(BaseModel):
     content: str
@@ -49,7 +49,7 @@ class Comment(CommentBase):
     is_blocked: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class AutoResponseSettings(BaseModel):
     enabled: bool

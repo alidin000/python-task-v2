@@ -1,4 +1,5 @@
 # app/main.py
+from contextlib import asynccontextmanager
 from typing import AsyncIterator
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -8,7 +9,8 @@ from app import models, schemas, crud, auth, database, moderation, deps
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
-
+    
+@asynccontextmanager
 async def database_lifespan(app: FastAPI) -> AsyncIterator[None]:
     print("Database initializing")
     database.init_db()
