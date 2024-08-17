@@ -76,7 +76,7 @@ class Bot:
                 for _ in range(self.num_comments_per_post):
                     self.create_comment(token, post_id)
         
-        analytics = self.get_comments_analytics("2023-01-01", "2023-12-31")
+        analytics = self.get_comments_analytics("2024-01-01", "2024-12-31")
         print("Comments Analytics:", analytics)
 
 if __name__ == "__main__":

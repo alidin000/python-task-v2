@@ -5,16 +5,17 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from app import models, schemas, crud, auth, database, moderation, deps
 
-app = FastAPI()
-
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
 
-async def lifespan() -> AsyncIterator[None]:
+async def database_lifespan(app: FastAPI) -> AsyncIterator[None]:
     print("Database initializing")
     database.init_db()
     yield
+    print("Database shutdown")
+
+app = FastAPI(lifespan=database_lifespan)
 
 # Root endpoint
 @app.get("/")

@@ -10,14 +10,14 @@ def check_db():
     print("Tables:", tables)
 
     # Describe a table
-    cursor.execute("PRAGMA table_info(users);")
+    cursor.execute("PRAGMA table_info(auto_response_settings);")
     columns = cursor.fetchall()
-    print("Users Table Columns:", columns)
+    print("auto_response_settings Table Columns:", columns)
 
     # Query data
-    cursor.execute("SELECT * FROM users;")
+    cursor.execute("SELECT * FROM auto_response_settings;")
     rows = cursor.fetchall()
-    print("Users Table Data:", rows)
+    print("auto_response_settings Table Data:", rows)
 
     conn.close()
 

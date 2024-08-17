@@ -79,10 +79,7 @@ def test_comments_daily_breakdown(client, get_auth_token):
     client.post(f"/posts/{post_id}/comments/", json={"content": "Comment 1"}, headers=headers)
     client.post(f"/posts/{post_id}/comments/", json={"content": "Comment 2"}, headers=headers)
 
-    created_comments_response = client.get(f"/posts/{post_id}/comments/", headers=headers)
-
-    response = client.get("/api/comments-daily-breakdown?date_from=2023-01-01&date_to=2023-12-31", headers=headers)
-    print("Analytics response:", response.json())  # Debugging line
+    response = client.get("/api/comments-daily-breakdown?date_from=2024-01-01&date_to=2024-12-31", headers=headers)
 
     assert response.status_code == 200
     assert len(response.json()) > 0

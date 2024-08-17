@@ -40,13 +40,22 @@ def create_comment(db: Session, comment: schemas.CommentCreate, post_id: int, is
     db.refresh(db_comment)
     return db_comment
 
-def get_comments_analytics(db, date_from, date_to):
-    return (
-        db.query(func.date(models.Comment.created_at).label('date'), func.count().label('count'))
-        .filter(models.Comment.created_at.between(date_from, date_to))
+def get_comments_analytics(db: Session, date_from: str, date_to: str):
+    results = (
+        db.query(
+            func.date(models.Comment.created_at).label('date'), 
+            func.count().label('count')
+        )
+        .filter(
+            models.Comment.created_at >= date_from, 
+            models.Comment.created_at < date_to
+        )
         .group_by(func.date(models.Comment.created_at))
+        .order_by(func.date(models.Comment.created_at))
         .all()
     )
+    analytics = [{"date": str(result.date), "count": result.count} for result in results]
+    return analytics
 
 def save_auto_response_settings(db: Session, post_id: int, settings: schemas.AutoResponseSettings):
     db_auto_response = models.AutoResponseSettings(
