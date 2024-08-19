@@ -208,7 +208,7 @@ To enable the bot to generate text content using Google's Generative AI, follow 
      class Config:
         API_URL = "http://localhost:8000"  # URL of your FastAPI app
         AI_API_URL = "https://ai.google.dev/generate-text"  # Google's AI API endpoint
-        AI_API_KEY = "AIzaSyDFjLbFzz5hqPbUpRvodbcb6xeqQPOLVdo"  # Replace with your Google AI API key
+        AI_API_KEY = "your_api_key"  # Replace with your Google AI API key
      ```
    - Ensure that your bot is configured to use this API key when generating text content.
 
